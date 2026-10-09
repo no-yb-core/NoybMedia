@@ -25,13 +25,15 @@ from __future__ import annotations
 import re
 from urllib.parse import urlparse
 
+from noybmedia.exceptions import ValidationError
+
 _MEDIA_ID_RE = re.compile(r"^[a-z0-9]{10}$")
 _SUPPORTED_SCHEMES = frozenset({"http", "https"})
 _SUPPORTED_HOSTS = frozenset({"wistia.com", "wistia.net"})
 _SUPPORTED_HOST_SUFFIXES = (".wistia.com", ".wistia.net")
 
 
-class InvalidWistiaUrlError(ValueError):
+class InvalidWistiaUrlError(ValidationError):
     """Raised when a value is not a supported Wistia URL or media identifier."""
 
 

@@ -9,6 +9,7 @@ selection — the caller supplies a validated URL and target path.
 from __future__ import annotations
 
 import os
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -132,3 +133,24 @@ def _content_length(response: httpx.Response) -> int | None:
     if value < 0:
         return None
     return value
+
+
+_UNSAFE_FILENAME_CHARS: Final = re.compile(r"[^\w\-. ]", flags=re.UNICODE)
+_FILENAME_SEPARATORS: Final = re.compile(r"[_\s]+")
+_MAX_FILENAME_BASE_LENGTH: Final = 100
+
+
+def safe_filename(name: str, extension: str = "") -> str:
+    """Return a filename derived from *name* that is safe on common filesystems.
+
+    Replaces characters outside ``[A-Za-z0-9._- ]`` with ``_``, collapses runs
+    of whitespace and underscores, trims leading/trailing separators and dots
+    (so path traversal segments can't survive), and truncates the base to a
+    reasonable length. Falls back to ``"media"`` when nothing usable remains.
+    """
+    base = _UNSAFE_FILENAME_CHARS.sub("_", name).strip()
+    base = _FILENAME_SEPARATORS.sub("_", base).strip("_. ")
+    base = base[:_MAX_FILENAME_BASE_LENGTH].rstrip("_. ") or "media"
+
+    ext = extension.strip().lower().lstrip(".")
+    return f"{base}.{ext}" if ext else base
