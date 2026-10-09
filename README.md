@@ -1,111 +1,54 @@
 # NoybMedia
 
-**An open-source Wistia video downloader built with Python.**
+Download Wistia-hosted videos that **you own or are otherwise authorized
+to access**, from the command line or through a small HTTP API.
 
-NoybMedia is a Python application designed to download Wistia-hosted videos that you own or are authorized to access. It aims to provide a reliable command-line interface and a simple web interface for retrieving media, selecting available video quality, and saving files locally.
+NoybMedia is built as a provider-aware downloader: URL parsing, provider
+metadata retrieval, and byte streaming are separated into distinct,
+independently tested modules.
 
-Part of the **Noybcore** open-source ecosystem.
+> **Responsible use.** NoybMedia is intended for media you own or have
+> permission to download. It does not bypass authentication, DRM, or
+> access controls, and it does not attempt to work around Wistia's
+> permissions or terms. Respect applicable laws and platform terms.
 
-> **Status:** Under active development. Features described below are planned unless explicitly marked as implemented.
+## Status
 
-## Features
+| Area | State |
+|---|---|
+| Wistia URL parser | ✅ Implemented, tested |
+| Provider-independent domain models | ✅ Implemented, tested |
+| Wistia metadata provider | ✅ Implemented, tested |
+| Streaming download service | ✅ Implemented, tested |
+| CLI (`noybmedia download`) | ✅ Implemented, tested |
+| FastAPI metadata endpoint | ✅ Implemented, tested |
+| FastAPI download endpoint | ❌ Planned |
+| Interactive web UI | ❌ Planned |
+| Deployment / hosting | ❌ Planned |
 
-- **Wistia URL and media ID support** — accept supported Wistia media references.
-- **Media metadata** — retrieve available video information when accessible.
-- **Quality selection** — choose from formats and resolutions actually offered by the source.
-- **Video downloads** — stream media to disk without loading the entire video into memory.
-- **Meaningful filenames** — preserve or generate safe, descriptive filenames.
-- **Progress reporting** — communicate download progress and failures.
-- **Batch downloads** — process multiple media references with configurable limits.
-- **CLI and web interfaces** — support both terminal-based and browser-based workflows.
-- **Automated testing** — validate application behavior using repeatable tests.
+## Supported inputs
 
-## Technology stack
+The parser accepts only explicitly supported Wistia URLs and identifiers:
 
-- Python
-- uv for project and dependency management
-- `pyproject.toml` and `uv.lock`
-- FastAPI for the web interface and HTTP API
-- Typer for the CLI
-- HTTPX for HTTP communication and streaming
-- pytest for automated testing
-- Ruff for linting and formatting
-- Pyright for static type checking
-- GitHub Actions for continuous integration
+- `https://<account>.wistia.com/medias/<id>`
+- `https://wistia.com/medias/<id>`
+- `https://wistia.net/medias/<id>`
+- `https://fast.wistia.com/embed/iframe/<id>`
+- `https://fast.wistia.net/embed/iframe/<id>`
+- `https://fast.wistia.com/embed/medias/<id>`
+- `https://fast.wistia.net/embed/medias/<id>`
+- A raw media identifier: exactly 10 lowercase alphanumeric characters (`[a-z0-9]{10}`).
 
-## Getting started
+Leading and trailing whitespace is ignored. Query strings and fragments
+are ignored once the URL structure is recognized. Unrelated domains,
+look-alike hosts (e.g. `wistia.example.com`, `wistia.com.example.org`),
+and undocumented paths are rejected.
 
-### Prerequisites
+## Installation
 
-- A supported Python version specified in `pyproject.toml`
-- [uv](https://docs.astral.sh/uv/)
-- Git
-
-### Installation
-
-Clone the repository:
+Requires Python 3.12 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 git clone https://github.com/no-yb-core/noybmedia.git
 cd noybmedia
-```
-
-Install the project and development dependencies:
-
-```bash
-uv sync --all-groups
-```
-
-The CLI and web interface will receive their usage instructions when their implementations are available.
-
-## Development
-
-Run the test suite:
-
-```bash
-uv run pytest
-```
-
-Check code quality:
-
-```bash
-uv run ruff check .
-uv run ruff format --check .
-uv run pyright
-```
-
-The project uses a `src/`-based package layout. Core download logic is shared between interfaces to avoid duplicated behavior.
-
-## Roadmap
-
-- [ ] Establish the Python package and project configuration.
-- [ ] Add automated tests and CI.
-- [ ] Implement Wistia URL and media ID validation.
-- [ ] Implement media metadata retrieval.
-- [ ] Implement available-format selection.
-- [ ] Implement robust, streamed video downloads.
-- [ ] Build the CLI.
-- [ ] Build the web interface.
-- [ ] Configure deployment and production safeguards.
-- [ ] Publish a stable release.
-
-## Responsible use
-
-NoybMedia is intended for media that users own or are authorized to download. It does not aim to bypass authentication, access controls, DRM, or other technical restrictions.
-
-Users are responsible for respecting copyright, applicable laws, and the terms governing their access to media.
-
-## Contributing
-
-Contributions and bug reports are welcome. Please open an issue before undertaking substantial changes. Code contributions should include relevant tests and pass the configured quality checks.
-
-## License
-
-The project license will be specified before the first public release.
-
-## Noybcore
-
-NoybMedia is part of the Noybcore open-source ecosystem.
-
-- Organization: https://github.com/no-yb-core
-- Website: https://noybcore.com
+uv sync
