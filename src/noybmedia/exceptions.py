@@ -25,3 +25,7 @@ class MediaNotFoundError(ProviderError):
 
 class ProviderResponseError(ProviderError):
     """Raised when a provider returns a malformed or unusable response."""
+
+
+class DownloadError(NoybMediaError):
+    """Raised when a media download fails."""
