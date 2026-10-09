@@ -1,5 +1,10 @@
 # NoybMedia
 
+[![Latest Release](https://img.shields.io/github/v/release/no-yb-core/NoybMedia)](https://github.com/no-yb-core/NoybMedia/releases/latest)
+[![CI](https://github.com/no-yb-core/NoybMedia/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/no-yb-core/NoybMedia/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/no-yb-core/NoybMedia)](https://github.com/no-yb-core/NoybMedia/blob/main/LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12%2B-3776AB)](https://www.python.org/downloads/)
+
 Download Wistia-hosted videos that **you own or are otherwise authorized
 to access**, from the command line or through a small HTTP API.
 
@@ -69,7 +74,6 @@ uv run noybmedia --help
 
 This displays the available CLI commands and their options.
 
-
 ## Usage
 
 ### Check the installed version
@@ -87,6 +91,8 @@ uv run noybmedia download "https://example.wistia.com/medias/abc123def4"
 ```
 
 The file is downloaded to the current directory by default.
+
+The example URL is a placeholder, not a guaranteed real media resource.
 
 ### Choose an output directory
 
